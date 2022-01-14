@@ -17,5 +17,5 @@ def set_storage(flow_name: str) -> GitHub:
     return GitHub(
         repo="jhall-phData/workflow-poc-flow",
         path=f"flows/{flow_name}.py",
-        access_token_secret="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"
+        access_token_secret="GITHUB_ACCESS_TOKEN"
     )
