@@ -9,7 +9,7 @@ from azure.core._match_conditions import MatchConditions
 from azure.storage.filedatalake._models import ContentSettings
 
 
-from flow_utils.prefect_configs import set_run_config, set_storage
+from prefect_configs import set_run_config, set_storage
 
 
 FLOW_NAME = "azSevenDwarfs"
@@ -40,7 +40,7 @@ def load_reference_data(ref_data, az_credential):
     directory_client = file_system_client.get_directory_client("sevendwarfs")
     ts = datetime.now().strftime("%Y%m%d%H%M%S")
     filename = "7_dwarfs_train_'{ts}'.csv"
-    file_client = directory_client.get_file_client("7_dwarfs_train.csv")
+    file_client = directory_client.get_file_client(filename)
     file_client.upload_data(ref_data, overwrite=True)
 
 
@@ -64,7 +64,7 @@ def main():
     with Flow(
         FLOW_NAME,
         #executor=LocalDaskExecutor(),
-        storage=set_storage(f"flows/"'${FLOW_NAME}'),
+        storage=set_storage(FLOW_NAME),
         run_config=set_run_config(),
     ) as flow:
         reference_data = extract_data(retrieved_secret)

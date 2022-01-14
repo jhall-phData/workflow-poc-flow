@@ -1,6 +1,6 @@
 from prefect import Flow
 from prefect.tasks.prefect import StartFlowRun
-from flow_utils.prefect_configs import set_run_config, set_storage
+from prefect_configs import set_run_config, set_storage
 
 FLOW_NAME = "orchestrating_flow"
 PROJECT_NAME = "dev-workflow-poc"
