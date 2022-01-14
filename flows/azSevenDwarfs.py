@@ -1,6 +1,6 @@
 import datetime
 import requests
-from prefect import task, Flow, Client
+from prefect import task, Flow
 from azure.keyvault.secrets import SecretClient
 from azure.identity import DefaultAzureCredential
 from azure.storage.blob import BlobServiceClient
@@ -60,10 +60,7 @@ def main():
     #     load_reference_data(reference_data, credential)
 
     # flow.run()
-    pclient = Client()
-    pclient.set_secret(name="GITHUB_ACCESS_TOKEN", value="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")
-    # prefect.context.setdefault("secrets", {}) # to make sure context has a secrets attribute
-    # prefect.context.secrets["GITHUB_ACCESS_TOKEN"] = "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"
+
     with Flow(
         FLOW_NAME,
         #executor=LocalDaskExecutor(),
