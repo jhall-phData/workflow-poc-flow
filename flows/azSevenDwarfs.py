@@ -64,7 +64,7 @@ def main():
     with Flow(
         FLOW_NAME,
         #executor=LocalDaskExecutor(),
-        storage=set_storage(FLOW_NAME),
+        storage=set_storage(f"flows/"'${FLOW_NAME}'),
         run_config=set_run_config(),
     ) as flow:
         reference_data = extract_data(retrieved_secret)
