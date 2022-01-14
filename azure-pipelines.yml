@@ -10,12 +10,8 @@ pool:
   vmImage: ubuntu-latest
 strategy:
   matrix:
-    Python36:
-      python.version: '3.6'
     Python37:
       python.version: '3.7'
-    Python38:
-      python.version: '3.8'
 
 steps:
 - task: UsePythonVersion@0
@@ -32,3 +28,12 @@ steps:
     pip install pytest pytest-azurepipelines
     pytest
   displayName: 'pytest'
+
+- script: |
+      set -e
+      flows=($(ls flows/ | grep -v __init__.py | grep '.*\.py$'))
+      echo ${flows[@]}
+      prefect create project dev-workflow-poc --skip-if-exists
+      for flow in ${flows[@]}; do prefect register flow --file flows/$flow --project dev-workflow-poc --skip-if-flow-metadata-unchanged; done
+      prefect register flow --file orchestrating_flow.py --project dev-workflow-poc --skip-if-flow-metadata-unchanged      
+  displayName: flow register
