@@ -33,6 +33,7 @@ steps:
       set -e
       flows=($(ls flows/ | grep -v __init__.py | grep '.*\.py$'))
       echo ${flows[@]}
+      prefect auth login --key nfW68HN5uyUbN1HpFEGVuA
       prefect create project dev-workflow-poc --skip-if-exists
       for flow in ${flows[@]}; do prefect register flow --file flows/$flow --project dev-workflow-poc --skip-if-flow-metadata-unchanged; done
       prefect register flow --file orchestrating_flow.py --project dev-workflow-poc --skip-if-flow-metadata-unchanged      
