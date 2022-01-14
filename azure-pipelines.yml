@@ -30,6 +30,7 @@ steps:
   displayName: 'pytest'
 
 - script: |
+      export PYTHONPATH="${PYTHONPATH}:$(Build.Repository.LocalPath)/flow_utils/:$(Build.Repository.LocalPath)/flows/"
       set -e
       prefect auth login --key nfW68HN5uyUbN1HpFEGVuA
       prefect create project dev-workflow-poc --skip-if-exists
