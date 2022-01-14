@@ -1,6 +1,6 @@
 import datetime
 import requests
-from prefect import task, Flow
+from prefect import task, Flow, Client
 from azure.keyvault.secrets import SecretClient
 from azure.identity import DefaultAzureCredential
 from azure.storage.blob import BlobServiceClient
@@ -48,9 +48,9 @@ def main():
     KVUri = "https://workflow-poc-kv001.vault.azure.net/"
     
     credential = DefaultAzureCredential()    
-    client = SecretClient(vault_url=KVUri, credential=credential)
+    azclient = SecretClient(vault_url=KVUri, credential=credential)
 
-    retrieved_secret = client.get_secret("SevenDwarfsURL")
+    retrieved_secret = azclient.get_secret("SevenDwarfsURL")
     print(f"Your secret is '{retrieved_secret.value}'.")
     SevenDwarfs = "https://cdn.touringplans.com/datasets/7_dwarfs_train.csv"
 
@@ -60,6 +60,10 @@ def main():
     #     load_reference_data(reference_data, credential)
 
     # flow.run()
+    pclient = Client()
+    pclient.set_secret(name="GITHUB_ACCESS_TOKEN", value="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")
+    # prefect.context.setdefault("secrets", {}) # to make sure context has a secrets attribute
+    # prefect.context.secrets["GITHUB_ACCESS_TOKEN"] = "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"
     with Flow(
         FLOW_NAME,
         #executor=LocalDaskExecutor(),
