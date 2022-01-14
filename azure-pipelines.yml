@@ -35,5 +35,4 @@ steps:
       prefect auth login --key nfW68HN5uyUbN1HpFEGVuA
       prefect create project dev-workflow-poc --skip-if-exists
       prefect register --project dev-workflow-poc --label prefect --path $(Build.Repository.LocalPath)/flows/
-      prefect register --project dev-workflow-poc --label prefect --path $(Build.Repository.LocalPath)/orchestrating_flow.py
   displayName: flow register
