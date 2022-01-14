@@ -31,7 +31,7 @@ def main():
         transformed_live_data = transform(reference_data)
         load_reference_data(reference_data)
 
-    flow.run()
+    #flow.run()
 
 
 if __name__ == "__main__":

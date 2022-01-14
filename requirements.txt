@@ -1,0 +1,6 @@
+prefect==0.15.11
+prefect[azure, kubernetes]
+azure-identity==1.7.1
+azure-keyvault-secrets==4.3.0
+azure-storage-blob==12.9.0
+azure-storage-file-datalake==12.5.0
