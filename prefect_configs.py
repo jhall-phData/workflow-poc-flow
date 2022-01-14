@@ -1,7 +1,7 @@
 import prefect
 from prefect.run_configs import LocalRun, KubernetesRun, RunConfig
 from prefect.storage.github import GitHub
-from prefect.client.secrets import Secret
+
 
 
 def set_run_config(local: bool = False) -> RunConfig:
