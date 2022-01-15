@@ -33,8 +33,17 @@ FLOW_NAME = "azSevenDwarfs"
 
 @task(log_stdout=True)
 def extract_data(url):
+    KVUri = "https://workflow-poc-kv001.vault.azure.net/"
+    
+    credential = DefaultAzureCredential()    
+    azclient = SecretClient(vault_url=KVUri, credential=credential)
+
+    retrieved_secret = azclient.get_secret("SevenDwarfsURL")
+    print(f"Your secret is '{retrieved_secret.value}'.")
+
     print("fetching reference data...")
-    html = requests.get(url)
+    #html = requests.get(retrieved_secret.valueurl)
+    html = requests.get(retrieved_secret.value)
     if html.ok:
         return html.content
     else:
@@ -47,7 +56,10 @@ def transform(ref_data):
     return live_aircraft_data
 
 @task(log_stdout=True)
-def load_reference_data(ref_data, az_credential):
+def load_reference_data(ref_data):
+    
+    az_credential = DefaultAzureCredential()    
+    
     print("saving reference data...")
 
     storage_account_name = "workflowpoc"
@@ -78,15 +90,9 @@ with Flow(
     storage=set_storage(FLOW_NAME),
     run_config=set_run_config(),
 ) as flow:
-    KVUri = "https://workflow-poc-kv001.vault.azure.net/"
     
-    credential = DefaultAzureCredential()    
-    azclient = SecretClient(vault_url=KVUri, credential=credential)
 
-    retrieved_secret = azclient.get_secret("SevenDwarfsURL")
-    print(f"Your secret is '{retrieved_secret.value}'.")
-
-    reference_data = extract_data(retrieved_secret.value)
+    reference_data = extract_data('x')
     load_reference_data(reference_data, credential)
 
 flow.run()
