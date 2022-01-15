@@ -1,5 +1,5 @@
 prefect==0.15.11
-prefect[azure, kubernetes]
+prefect[azure, kubernetes]==0.15.11
 azure-identity==1.7.1
 azure-keyvault-secrets==4.3.0
 azure-storage-blob==12.9.0
