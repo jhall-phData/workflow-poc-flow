@@ -21,3 +21,6 @@ steps:
     repository: 'prefect-repo'
     command: 'buildAndPush'
     Dockerfile: 'Dockerfile'
+    tags: |
+      $(Build.BuildId)
+      latest
