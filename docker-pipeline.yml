@@ -14,4 +14,4 @@ steps:
     containerRegistry: 'workflow-acr'
     repository: 'prefect-repo'
     command: 'buildAndPush'
-    Dockerfile: '**/Dockerfile'
+    Dockerfile: 'Dockerfile'
