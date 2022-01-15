@@ -1,4 +1,5 @@
 FROM prefecthq/prefect:0.15.11-python3.7
+RUN apt update && apt install curl -y
 RUN curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
 RUN /usr/local/bin/python -m pip install --upgrade pip
 WORKDIR /opt/prefect
