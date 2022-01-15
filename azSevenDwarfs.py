@@ -93,7 +93,7 @@ with Flow(
     
 
     reference_data = extract_data('x')
-    load_reference_data(reference_data, credential)
+    load_reference_data(reference_data)
 
 flow.run()
   
