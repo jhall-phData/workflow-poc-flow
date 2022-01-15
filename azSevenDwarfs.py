@@ -62,14 +62,7 @@ def load_reference_data(ref_data, az_credential):
     file_client.upload_data(ref_data, overwrite=True)
 
 
-def main():
-    KVUri = "https://workflow-poc-kv001.vault.azure.net/"
-    
-    credential = DefaultAzureCredential()    
-    azclient = SecretClient(vault_url=KVUri, credential=credential)
 
-    retrieved_secret = azclient.get_secret("SevenDwarfsURL")
-    print(f"Your secret is '{retrieved_secret.value}'.")
     SevenDwarfs = "https://cdn.touringplans.com/datasets/7_dwarfs_train.csv"
 
     # with Flow("7dwarfs") as flow:
@@ -85,9 +78,14 @@ def main():
         storage=set_storage(FLOW_NAME),
         run_config=set_run_config(),
     ) as flow:
+        KVUri = "https://workflow-poc-kv001.vault.azure.net/"
+        
+        credential = DefaultAzureCredential()    
+        azclient = SecretClient(vault_url=KVUri, credential=credential)
+
+        retrieved_secret = azclient.get_secret("SevenDwarfsURL")
+        print(f"Your secret is '{retrieved_secret.value}'.")
         reference_data = extract_data(retrieved_secret)
         load_reference_data(reference_data, credential)
     flow.run()
 
-if __name__ == "__main__":
-    main()
