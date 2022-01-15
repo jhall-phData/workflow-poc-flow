@@ -87,6 +87,7 @@ def main():
     ) as flow:
         reference_data = extract_data(retrieved_secret)
         load_reference_data(reference_data, credential)
+    flow.run()
 
 if __name__ == "__main__":
     main()
