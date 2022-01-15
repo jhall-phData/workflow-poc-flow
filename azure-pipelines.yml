@@ -32,7 +32,7 @@ steps:
 - script: |
       set -e
       prefect auth login --key nfW68HN5uyUbN1HpFEGVuA
-      prefect create project dev-workflow-poc --skip-if-exists
+      prefect create project dev-workflow-poc2 --skip-if-exists
       echo $(Build.Repository.LocalPath)/azSevenDwarfs.py
-      prefect register --project dev-workflow-poc --label prefect --path $(Build.Repository.LocalPath)/azSevenDwarfs.py
+      prefect register --project dev-workflow-poc2 --label prefect --path $(Build.Repository.LocalPath)/azSevenDwarfs.py
   displayName: flow register

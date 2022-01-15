@@ -87,5 +87,5 @@ def load_reference_data(ref_data, az_credential):
         print(f"Your secret is '{retrieved_secret.value}'.")
         reference_data = extract_data(retrieved_secret)
         load_reference_data(reference_data, credential)
-    flow.run()
+  
 

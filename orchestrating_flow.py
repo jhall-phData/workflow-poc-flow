@@ -24,9 +24,9 @@ def set_storage(flow_name: str) -> GitHub:
         access_token_secret="GITHUB_ACCESS_TOKEN"
     )
 
-with Flow(
-    FLOW_NAME, storage=set_storage(FLOW_NAME), run_config=set_run_config(),
-) as flow:
-    kickoff_flow = start_flow_run(flow_name="azSevenDwarfs")
+# with Flow(
+#     FLOW_NAME, storage=set_storage(FLOW_NAME), run_config=set_run_config(),
+# ) as flow:
+#     kickoff_flow = start_flow_run(flow_name="azSevenDwarfs")
     
     
