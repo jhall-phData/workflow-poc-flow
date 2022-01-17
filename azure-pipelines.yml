@@ -55,3 +55,4 @@ steps:
       AZURE_CLIENT_ID: $(workflow-poc-sp-client-id)
       AZURE_TENANT_ID: $(workflow-poc-sp-tenant-id)
       AZURE_CLIENT_SECRET: $(workflow-poc-sp-secret)
+      PYTHONPATH: "${PYTHONPATH}:$(Build.Repository.LocalPath)/flow_utils/"
