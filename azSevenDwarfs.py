@@ -80,6 +80,7 @@ with Flow(
 ) as flow:
     KVUri = "https://workflow-poc-kv001.vault.azure.net/"
     
+    # this works if creds are env vars; but why
     credential = DefaultAzureCredential()    
     azclient = SecretClient(vault_url=KVUri, credential=credential)
 
