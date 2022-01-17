@@ -50,6 +50,8 @@ spec:
           value: http://:8080
         - name: GITHUB_ACCESS_TOKEN
           value: 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
+        - name: PYTHONPATH
+          value: "${PYTHONPATH}:/opt/prefect/flow_utils/"
         image: workflowpocacr001.azurecr.io/prefect-repo:latest
         imagePullPolicy: Always
         livenessProbe:
