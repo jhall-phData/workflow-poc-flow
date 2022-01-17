@@ -13,6 +13,8 @@ trigger:
     exclude:
       - "Dockerfile*"
       - "*__init__.py*"
+      - "prefect-agent.yml"
+      - "docker-pipeline.yml"
 
 pool:
   vmImage: ubuntu-latest
