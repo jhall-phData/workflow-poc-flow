@@ -7,51 +7,52 @@
 # - main
 trigger:
   branches:
-     include:
-        - main
+    include:
+      - main
   paths:
-     exclude:
-       - 'Dockerfile*'
-       - '*__init__.py*'
+    exclude:
+      - "Dockerfile*"
+      - "*__init__.py*"
 
 pool:
   vmImage: ubuntu-latest
 strategy:
   matrix:
     Python37:
-      python.version: '3.7'
+      python.version: "3.7"
 
 steps:
-- task: AzureKeyVault@2
-      inputs:
-        azureSubscription: 'workflow-poc-sp'
-        KeyVaultName: 'workflow-poc-kv001'
-        SecretsFilter: '*'
-        RunAsPreJob: false
-        
-- task: UsePythonVersion@0
-  inputs:
-    versionSpec: '$(python.version)'
-  displayName: 'Use Python $(python.version)'
+  - task: AzureKeyVault@2
+    inputs:
+      azureSubscription: "workflow-poc-sp"
+      KeyVaultName: "workflow-poc-kv001"
+      SecretsFilter: "*"
+      RunAsPreJob: false
+    displayName: "Pull Azure Secrets"
 
-- script: |
-    python -m pip install --upgrade pip
-    pip install -r requirements.txt
-  displayName: 'Install dependencies'
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: "$(python.version)"
+    displayName: "Use Python $(python.version)"
 
-- script: |
-    pip install pytest pytest-azurepipelines
-    pytest
-  displayName: 'pytest'
+  - script: |
+      python -m pip install --upgrade pip
+      pip install -r requirements.txt
+    displayName: "Install dependencies"
 
-- script: |
+  - script: |
+      pip install pytest pytest-azurepipelines
+      pytest
+    displayName: "pytest"
+
+  - script: |
       set -e
       prefect auth login --key nfW68HN5uyUbN1HpFEGVuA
       prefect create project dev-workflow-poc2 --skip-if-exists
       echo $(Build.Repository.LocalPath)/azSevenDwarfs.py
       prefect register --project dev-workflow-poc2 --label prefect --path $(Build.Repository.LocalPath)/azSevenDwarfs.py
-  displayName: flow register
-  env:
-    AZURE_CLIENT_ID: $(workflow-poc-sp-client-id)
-    AZURE_TENANT_ID: $(workflow-poc-sp-tenant-id)
-    AZURE_CLIENT_SECRET: $(workflow-poc-sp-secret)
+    displayName: flow register
+    env:
+      AZURE_CLIENT_ID: $(workflow-poc-sp-client-id)
+      AZURE_TENANT_ID: $(workflow-poc-sp-tenant-id)
+      AZURE_CLIENT_SECRET: $(workflow-poc-sp-secret)
