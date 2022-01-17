@@ -1,33 +1,16 @@
 import datetime
 import requests
+
 from prefect import task, Flow
-from prefect.run_configs import LocalRun, KubernetesRun, RunConfig
-from prefect.storage.github import GitHub
 
 from azure.keyvault.secrets import SecretClient
 from azure.identity import DefaultAzureCredential
-from azure.storage.blob import BlobServiceClient
+#from azure.storage.blob import BlobServiceClient
 from azure.storage.filedatalake import DataLakeServiceClient
-from azure.core._match_conditions import MatchConditions
-from azure.storage.filedatalake._models import ContentSettings
+# from azure.core._match_conditions import MatchConditions
+# from azure.storage.filedatalake._models import ContentSettings
 
-
-def set_run_config(local: bool = False) -> RunConfig:
-    if local:
-        return LocalRun(labels=["dev"])
-    return KubernetesRun(
-        labels=["prefect"],
-        image=f"workflowpocacr001.azurecr.io/prefect-repo:latest",
-        image_pull_policy="IfNotPresent",
-    )
-
-
-def set_storage(flow_name: str) -> GitHub:   
-    return GitHub(
-        repo="jhall-phData/workflow-poc-flow",
-        path=f"{flow_name}.py",
-        access_token_secret="GITHUB_ACCESS_TOKEN"
-    )
+from flow_utils.prefect_configs import set_run_config,set_storage
 
 FLOW_NAME = "azSevenDwarfs"
 
@@ -61,17 +44,6 @@ def load_reference_data(ref_data, az_credential):
     file_client = directory_client.get_file_client(filename)
     file_client.upload_data(ref_data, overwrite=True)
 
-
-
-    SevenDwarfs = "https://cdn.touringplans.com/datasets/7_dwarfs_train.csv"
-
-    # with Flow("7dwarfs") as flow:
-    #     reference_data = extract_data(SevenDwarfs)
-    # #     transformed_live_data = transform(reference_data)
-    #     load_reference_data(reference_data, credential)
-
-    # flow.run()
-
 with Flow(
     FLOW_NAME,
     #executor=LocalDaskExecutor(),
@@ -83,7 +55,7 @@ with Flow(
     # this works if creds are env vars; but why
     credential = DefaultAzureCredential()    
     azclient = SecretClient(vault_url=KVUri, credential=credential)
-
+    # SevenDwarfs = "https://cdn.touringplans.com/datasets/7_dwarfs_train.csv"
     retrieved_secret = azclient.get_secret("SevenDwarfsURL")
     print(f"Your secret is '{retrieved_secret.value}'.")
 
