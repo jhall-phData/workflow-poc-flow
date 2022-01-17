@@ -1,4 +1,4 @@
-FROM python3.7
+FROM python:3.8-slim-buster
 RUN /usr/local/bin/python -m pip install --upgrade pip
 WORKDIR /opt/prefect
 # COPY flow_utilities/ /opt/prefect/flow_utilities/
