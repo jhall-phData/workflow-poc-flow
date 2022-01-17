@@ -14,19 +14,28 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
-steps:
-- task: Docker@2
-  inputs:
-    containerRegistry: 'workflow-acr'
-    repository: 'prefect-repo'
-    command: 'buildAndPush'
-    Dockerfile: 'Dockerfile'
-    tags: |
-      $(Build.BuildId)
-      latest
-- task: KubernetesManifest@0
-  displayName: deploy
-  inputs:
-    kubernetesServiceConnection: 'workflow-poc-k8s'
-    manifests: 'prefect-agent.yml'
-    rolloutStatusTimeout: 300
+stages:
+- stage: Docker
+  jobs: 
+  - job: job_1
+    steps:
+    - task: Docker@2
+      inputs:
+        containerRegistry: 'workflow-acr'
+        repository: 'prefect-repo'
+        command: 'buildAndPush'
+        Dockerfile: 'Dockerfile'
+        tags: |
+          $(Build.BuildId)
+          latest
+          
+- stage: K8s
+  jobs: 
+  - job: job_2
+    steps:        
+    - task: KubernetesManifest@0
+      displayName: deploy
+      inputs:
+        kubernetesServiceConnection: 'workflow-poc-k8s'
+        manifests: 'prefect-agent.yml'
+        rolloutStatusTimeout: 300
