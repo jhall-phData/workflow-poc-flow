@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - args:
-        - prefect agent docker start
+        - prefect agent kubernetes start
         command:
         - /bin/bash
         - -c
