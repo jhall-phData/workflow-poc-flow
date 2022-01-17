@@ -1,4 +1,4 @@
-FROM prefecthq/prefect:0.15.11-python3.7
+FROM python3.7
 RUN /usr/local/bin/python -m pip install --upgrade pip
 WORKDIR /opt/prefect
 # COPY flow_utilities/ /opt/prefect/flow_utilities/
@@ -6,3 +6,4 @@ COPY requirements.txt .
 COPY setup.py .
 RUN pip install .
 RUN pip3 install .
+run pip list .
