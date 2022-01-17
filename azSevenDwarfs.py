@@ -17,8 +17,8 @@ def set_run_config(local: bool = False) -> RunConfig:
         return LocalRun(labels=["dev"])
     return KubernetesRun(
         labels=["prefect"],
-        # image=f"workflowpocacr001.azurecr.io/prefect-repo:latest",
-        # image_pull_policy="IfNotPresent",
+        image=f"workflowpocacr001.azurecr.io/prefect-repo:latest",
+        image_pull_policy="IfNotPresent",
     )
 
 
