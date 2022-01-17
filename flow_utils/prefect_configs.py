@@ -17,6 +17,6 @@ def set_run_config(local: bool = False) -> RunConfig:
 def set_storage(flow_name: str) -> GitHub:   
     return GitHub(
         repo="jhall-phData/workflow-poc-flow",
-        path=f"{flow_name}.py",
+        path=f"flows/{flow_name}.py",
         access_token_secret="GITHUB_ACCESS_TOKEN"
     )
