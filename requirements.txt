@@ -1,5 +1,5 @@
 prefect==0.15.11
-prefect[azure, kubernetes]==0.15.11
+prefect[azure, kubernetes, github]==0.15.11
 azure-common==1.1.27
 azure-core==1.21.1
 azure-identity==1.7.1
