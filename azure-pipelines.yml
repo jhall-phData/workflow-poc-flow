@@ -64,10 +64,11 @@ stages:
   #     eq(variables['Build.SourceBranchName'], variables['releaseBranchName'])
   #   )
   jobs:
-  - deployment: Deploy Dev
+  - deployment: Deploy
     pool:
       vmImage: 'ubuntu-latest'
     environment: dev
+    displayName: 'Deploy Dev'
     strategy:
       runOnce:
         deploy:
@@ -86,10 +87,11 @@ stages:
   #     eq(variables['Build.SourceBranchName'], variables['releaseBranchName'])
   #   )
   jobs:
-  - deployment: Deploy Test
+  - deployment: Deploy
     pool:
       vmImage: 'ubuntu-latest'
     environment: test
+    displayName: 'Deploy Test'
     strategy:
       runOnce:
         deploy:
