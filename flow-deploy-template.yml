@@ -5,6 +5,7 @@ parameters:
 steps:
   - download: current
     artifact: Flow
+    path: 
   - task: AzureKeyVault@2
     inputs:
       azureSubscription: "Azure subscription 1 (858549e2-8aab-4d4f-ad8d-d87e01785d46)"
@@ -19,15 +20,17 @@ steps:
       architecture: 'x64'
   - script: |
       python -m pip install --upgrade pip
-      pip install -r $(Pipeline.Workspace)/Flow/requirements.txt
+      pip install -r requirements.txt
     displayName: "Install dependencies"
+    workingDirectory: $(Pipeline.Workspace)/Flow/
   - script: |
-      export PYTHONPATH="${PYTHONPATH}:$(Pipeline.Workspace)/Flow/flow_utils/"
+      export PYTHONPATH="${PYTHONPATH}:/flow_utils/"
       set -e
       prefect auth login --key $(prefect-key)
       prefect create project ${{ parameters.env }}-workflow-poc --skip-if-exists
-      prefect register --project ${{ parameters.env }}-workflow-poc --label prefect --path $(Pipeline.Workspace)/Flow/flows
+      prefect register --project ${{ parameters.env }}-workflow-poc --label prefect --path /flows
     displayName: flow register
+    workingDirectory: $(Pipeline.Workspace)/Flow/
     env:
       AZURE_CLIENT_ID: $(workflow-poc-sp-client-id)
       AZURE_TENANT_ID: $(workflow-poc-sp-tenant-id)
