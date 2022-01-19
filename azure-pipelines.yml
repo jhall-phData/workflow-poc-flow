@@ -79,7 +79,7 @@ stages:
 
 - stage: 'Test'
   displayName: 'Deploy to the test environment'
-  dependsOn: Build
+  dependsOn: Dev
   # condition: |
   #   and
   #   (
