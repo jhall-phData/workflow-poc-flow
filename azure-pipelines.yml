@@ -64,10 +64,32 @@ stages:
   #     eq(variables['Build.SourceBranchName'], variables['releaseBranchName'])
   #   )
   jobs:
-  - deployment: Deploy
+  - deployment: Deploy Dev
     pool:
       vmImage: 'ubuntu-latest'
     environment: dev
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+            - template: flow-deploy-template.yml
+              parameters:
+                env: $(Environment.name)
+
+- stage: 'Test'
+  displayName: 'Deploy to the test environment'
+  dependsOn: Build
+  # condition: |
+  #   and
+  #   (
+  #     succeeded(),
+  #     eq(variables['Build.SourceBranchName'], variables['releaseBranchName'])
+  #   )
+  jobs:
+  - deployment: Deploy Test
+    pool:
+      vmImage: 'ubuntu-latest'
+    environment: test
     strategy:
       runOnce:
         deploy:
