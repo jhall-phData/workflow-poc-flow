@@ -27,7 +27,7 @@ steps:
       set -e
       prefect auth login --key $(prefect-key)
       prefect create project ${{ parameters.env }}-workflow-poc --skip-if-exists
-      prefect register --project ${{ parameters.env }}-workflow-poc --label prefect --path /flows
+      prefect register --project ${{ parameters.env }}-workflow-poc --label prefect --path flows
     displayName: flow register
     workingDirectory: $(Pipeline.Workspace)/Flow/
     env:
