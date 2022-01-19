@@ -46,14 +46,15 @@ steps:
       pip install pytest pytest-azurepipelines
       pytest
     displayName: "pytest"
-  - task: ArchiveFiles@2
-    displayName: Archive Flow
-    inputs:
-      rootFolderOrFile: $(Build.SourcesDirectory)/
-      archiveType: tar
-      archiveFile: $(Build.ArtifactStagingDirectory)/flow-$(Build.BuildId).tgz
-  - task: PublishPipelineArtifact@1
-    displayName: Publish Flow Archive
-    inputs:
-      path: $(Build.ArtifactStagingDirectory)/
-      artifactName: flow-$(Build.BuildId).tgz      
+
+  - script: |
+      export PYTHONPATH="${PYTHONPATH}:$(Build.Repository.LocalPath)/flow_utils/"
+      set -e
+      prefect auth login --key $(prefect-key)
+      prefect create project dev-workflow-poc --skip-if-exists
+      prefect register --project dev-workflow-poc --label prefect --path $(Build.Repository.LocalPath)/flows
+    displayName: flow register
+    env:
+      AZURE_CLIENT_ID: $(workflow-poc-sp-client-id)
+      AZURE_TENANT_ID: $(workflow-poc-sp-tenant-id)
+      AZURE_CLIENT_SECRET: $(workflow-poc-sp-secret)
