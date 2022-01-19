@@ -4,7 +4,6 @@ parameters:
 
 steps:
   - download: current
-    artifact: drop
   - task: AzureKeyVault@2
     inputs:
       azureSubscription: "Azure subscription 1 (858549e2-8aab-4d4f-ad8d-d87e01785d46)"
