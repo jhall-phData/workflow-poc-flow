@@ -1,8 +1,6 @@
 parameters:
 - name: env
   type: string
-- name: python-version
-  type: string
 
 steps:
   - download: current
@@ -16,8 +14,9 @@ steps:
     displayName: "Pull Azure Secrets"
   - task: UsePythonVersion@0
     inputs:
-      versionSpec: "${{ parameters.python-version }}"
-    displayName: "Use Python ${{ parameters.python-version }}"
+      versionSpec: '3.7.x' 
+      addToPath: true 
+      architecture: 'x64'
   - script: |
       python -m pip install --upgrade pip
       pip install -r requirements.txt
