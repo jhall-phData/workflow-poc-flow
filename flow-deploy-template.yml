@@ -18,7 +18,6 @@ steps:
       addToPath: true 
       architecture: 'x64'
   - script: |
-      echo $(Build.SourcesDirectory)
       python -m pip install --upgrade pip
       pip install -r $(Pipeline.Workspace)/Flow/requirements.txt
     displayName: "Install dependencies"

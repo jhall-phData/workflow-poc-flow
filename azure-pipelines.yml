@@ -50,8 +50,8 @@ stages:
           pip install pytest pytest-azurepipelines
           pytest
         displayName: "pytest"
-        # maybe this: Build.SourcesDirectory
-      - publish: '$(Build.ArtifactStagingDirectory)'
+        # maybe this: Build.SourcesDirectoryBuild.ArtifactStagingDirectory
+      - publish: '$(Build.SourcesDirectory)'
         artifact: Flow
 
 - stage: 'Dev'
