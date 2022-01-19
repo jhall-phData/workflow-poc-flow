@@ -69,6 +69,6 @@ stages:
       runOnce:
         deploy:
           steps:
-            - template: templates/docker-build.yml
+            - template: flow-deploy-template.yml
               parameters:
                 env: $(Environment.name)
