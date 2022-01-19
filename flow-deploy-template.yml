@@ -1,0 +1,35 @@
+parameters:
+- name: env
+  type: string
+- name: python-version
+  type: string
+
+steps:
+  - download: current
+    artifact: drop
+  - task: AzureKeyVault@2
+    inputs:
+      azureSubscription: "Azure subscription 1 (858549e2-8aab-4d4f-ad8d-d87e01785d46)"
+      KeyVaultName: "workflow-poc-kv001"
+      SecretsFilter: "*"
+      RunAsPreJob: false
+    displayName: "Pull Azure Secrets"
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: "${{ parameters.python-version }}"
+    displayName: "Use Python ${{ parameters.python-version }}"
+  - script: |
+      python -m pip install --upgrade pip
+      pip install -r requirements.txt
+    displayName: "Install dependencies"
+  - script: |
+      export PYTHONPATH="${PYTHONPATH}:$(Build.Repository.LocalPath)/flow_utils/"
+      set -e
+      prefect auth login --key $(prefect-key)
+      prefect create project ${{ parameters.env }}-workflow-poc --skip-if-exists
+      prefect register --project ${{ parameters.env }}-workflow-poc --label prefect --path $(Build.Repository.LocalPath)/flows
+    displayName: flow register
+    env:
+      AZURE_CLIENT_ID: $(workflow-poc-sp-client-id)
+      AZURE_TENANT_ID: $(workflow-poc-sp-tenant-id)
+      AZURE_CLIENT_SECRET: $(workflow-poc-sp-secret)

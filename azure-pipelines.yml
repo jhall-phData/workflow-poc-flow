@@ -23,38 +23,57 @@ strategy:
     Python37:
       python.version: "3.7"
 
-steps:
-  - task: AzureKeyVault@2
-    inputs:
-      azureSubscription: "Azure subscription 1 (858549e2-8aab-4d4f-ad8d-d87e01785d46)"
-      KeyVaultName: "workflow-poc-kv001"
-      SecretsFilter: "*"
-      RunAsPreJob: false
-    displayName: "Pull Azure Secrets"
+stages:
+- stage: 'Build'
+  displayName: 'Build the web application'
+  jobs: 
+  - job: 'Build'
+    displayName: 'Build job'
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+      - task: AzureKeyVault@2
+        inputs:
+          azureSubscription: "Azure subscription 1 (858549e2-8aab-4d4f-ad8d-d87e01785d46)"
+          KeyVaultName: "workflow-poc-kv001"
+          SecretsFilter: "*"
+          RunAsPreJob: false
+        displayName: "Pull Azure Secrets"
 
-  - task: UsePythonVersion@0
-    inputs:
-      versionSpec: "$(python.version)"
-    displayName: "Use Python $(python.version)"
+      - task: UsePythonVersion@0
+        inputs:
+          versionSpec: "$(python.version)"
+        displayName: "Use Python $(python.version)"
 
-  - script: |
-      python -m pip install --upgrade pip
-      pip install -r requirements.txt
-    displayName: "Install dependencies"
+      - script: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+        displayName: "Install dependencies"
 
-  - script: |
-      pip install pytest pytest-azurepipelines
-      pytest
-    displayName: "pytest"
+      - script: |
+          pip install pytest pytest-azurepipelines
+          pytest
+        displayName: "pytest"
 
-  - script: |
-      export PYTHONPATH="${PYTHONPATH}:$(Build.Repository.LocalPath)/flow_utils/"
-      set -e
-      prefect auth login --key nfW68HN5uyUbN1HpFEGVuA
-      prefect create project dev-workflow-poc --skip-if-exists
-      prefect register --project dev-workflow-poc --label prefect --path $(Build.Repository.LocalPath)/flows
-    displayName: flow register
-    env:
-      AZURE_CLIENT_ID: $(workflow-poc-sp-client-id)
-      AZURE_TENANT_ID: $(workflow-poc-sp-tenant-id)
-      AZURE_CLIENT_SECRET: $(workflow-poc-sp-secret)
+- stage: 'Dev'
+  displayName: 'Deploy to the dev environment'
+  dependsOn: Build
+  # condition: |
+  #   and
+  #   (
+  #     succeeded(),
+  #     eq(variables['Build.SourceBranchName'], variables['releaseBranchName'])
+  #   )
+  jobs:
+  - deployment: Deploy
+    pool:
+      vmImage: 'ubuntu-latest'
+    environment: dev
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+            - template: templates/docker-build.yml
+              parameters:
+                env: $(Environment.name)
+                python-version: $(python.version)
