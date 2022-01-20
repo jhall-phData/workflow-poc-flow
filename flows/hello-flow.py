@@ -7,7 +7,10 @@ def hello_task():
     logger = prefect.context.get("logger")
     logger.info("Hello world!")
     return True
-FLOW_NAME = "hello-flow"    
+
+# Flow Name must match the filename in Github
+FLOW_NAME = "hello-flow"
+
 with Flow(
     FLOW_NAME,
     #executor=LocalDaskExecutor(),
