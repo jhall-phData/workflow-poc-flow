@@ -11,6 +11,6 @@ start_flow_run = StartFlowRun(project_name=PROJECT_NAME, wait=True)
 with Flow(
     FLOW_NAME, storage=set_storage(FLOW_NAME), run_config=set_run_config(),
 ) as flow:
-    kickoff_flow = start_flow_run(flow_name="azSevenDwarfs")
-    hello_world = start_flow_run(flow_name="hello-flow")
+    kickoff_flow = start_flow_run(flow_name="azSevenDwarfs", task_args={"name": "SevenDwarfs"})
+    hello_world = start_flow_run(flow_name="hello-flow", task_args={"name": "Hello World!"})
     

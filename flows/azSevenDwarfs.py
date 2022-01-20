@@ -37,6 +37,7 @@ def load_reference_data(ref_data, az_credential):
 
     file_client = directory_client.get_file_client(filename)
     file_client.upload_data(ref_data, overwrite=True)
+    return True
 
 with Flow(
     FLOW_NAME,
@@ -54,7 +55,7 @@ with Flow(
     print(f"Your secret is '{retrieved_secret.value}'.")
 
     reference_data = extract_data(retrieved_secret.value)
-    load_reference_data(reference_data, credential)
+    success = load_reference_data(reference_data, credential)
 
 
   

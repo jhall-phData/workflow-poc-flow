@@ -1,10 +1,11 @@
 import prefect
 from prefect import task, Flow
 
-@task
+@task(log_stdout=True)
 def hello_task():
     logger = prefect.context.get("logger")
     logger.info("Hello world!")
+    return True
 
 with Flow("hello-flow") as flow:
-    hello_task()
+    success = hello_task()
